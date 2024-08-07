@@ -26,11 +26,19 @@ while True:
     red,img = cam.read()
     grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     face = face_cascade.detectMultiScale(grey, 1.3,4)
+    for(x,y,w,h) in face:
+        cv2.rectangle(img,(x,y),(x+w, y+h) , (255,0,0),2)
+        face = grey[y:y + h, x:x + w]
+        face_resize  = cv2.resize(face, (width,height))
+        prediction = recogniser.predict(face_resize)
+        print(prediction)
+        if prediction [1] < 500:
+            cv2.putText(img, '% s - %.0f' %(names[prediction[0]], prediction [1]), ( x- 10, y - 10), cv2.FONT_HERSHEY_PLAIN,1, (0,255,0))
+        else:
+            cv2.putText(img, "not recognised", ( x- 10, y - 10), cv2.FONT_HERSHEY_PLAIN,1, (0,255,0))
 
+    cv2.imshow("output", img)
+    key = cv2.waitKey(10) #space keyyy
+    if key == 27:
+        break
 
-
-
-
-
-    
-    cv2.putText
